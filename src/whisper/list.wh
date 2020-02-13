@@ -11,5 +11,5 @@ mod append {
 
 mod prefix {
     Xs is_prefix_of Ys if
-        Xs appended_to _ gives Ys in <list::append>;
+        Xs appended_to _ gives Ys in super::append;
 }

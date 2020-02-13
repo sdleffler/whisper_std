@@ -1,13 +1,31 @@
-use ::whisper::{
-    knowledge_base::{KnowledgeBase, SerializedKnowledgeBase},
-    prelude::*,
+use ::{
+    lazy_static::lazy_static,
+    whisper::{
+        knowledge_base::{KnowledgeBase, SerializedKnowledgeBase},
+        prelude::*,
+    },
 };
 
-pub fn list(symbols: SymbolTable) -> KnowledgeBase {
-    let list_kb_bytes = include_bytes!(concat!(env!("OUT_DIR"), "/list.kb"));
-    let deserialized: SerializedKnowledgeBase =
-        bincode::deserialize_from(&mut &list_kb_bytes[..]).expect("this must not fail!");
-    deserialized.into_knowledge_base(symbols)
+pub fn list() -> &'static SerializedKnowledgeBase {
+    lazy_static! {
+        static ref KB: SerializedKnowledgeBase = {
+            let kb_bytes = include_bytes!(concat!(env!("OUT_DIR"), "/list.kb"));
+            bincode::deserialize_from(&mut &kb_bytes[..]).expect("this must not fail!")
+        };
+    };
+
+    &KB
+}
+
+pub fn map() -> &'static SerializedKnowledgeBase {
+    lazy_static! {
+        static ref KB: SerializedKnowledgeBase = {
+            let kb_bytes = include_bytes!(concat!(env!("OUT_DIR"), "/map.kb"));
+            bincode::deserialize_from(&mut &kb_bytes[..]).expect("this must not fail!")
+        };
+    };
+
+    &KB
 }
 
 #[cfg(test)]
@@ -17,6 +35,12 @@ mod tests {
     #[test]
     fn list_no_bincode_errors() {
         let symbols = SymbolTable::new();
-        let _ = list(symbols);
+        let _ = list().into_knowledge_base_with_root(symbols, &Symbol::MOD);
+    }
+
+    #[test]
+    fn map_no_bincode_errors() {
+        let symbols = SymbolTable::new();
+        let _ = map().into_knowledge_base_with_root(symbols, &Symbol::MOD);
     }
 }

@@ -10,7 +10,16 @@ edition = "2018"
 failure = "0.1.6"
 bincode = "1.2.1"
 whisper = { path = "../whisper" }
+lazy_static = "1.4.0"
+whisper_ir = { path = "../whisper_ir" }
+im = "14.2.0"
+serde = "1.0.104"
+serde_json = { path = "../json" }
+serde-transcode = "1.1.0"
 
 [build-dependencies]
 whisper_util = { path = "../whisper_util" }
 failure = "0.1.6"
+
+[dev-dependencies]
+toml = "0.5.6"
